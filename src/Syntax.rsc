@@ -59,7 +59,7 @@ syntax Type
 ;
 
 lexical Str 
-= [\"][.]*[\"]  
+= [\"][a-zA-Z_\ 0-9?]*[\"]  
 ;
 
 lexical Int 

@@ -13,7 +13,7 @@ start syntax Form
 ;
 // TODO: question, computed question, block, if-then-else, if-then
 syntax Question 
-= Str s [\n] Ident name [:] Type t
+= Str s Ident name [:] Type t "="? Expr?
 | Ifthenelse
 ;
 
@@ -23,7 +23,7 @@ syntax Ifthenelse
 
 
 syntax Ifthen
-= "if" "(" Ident i")" "{\n" Question* questions "}"
+= "if" "(" Ident i") {" Question* questions "}"
 ;
 
 
@@ -50,7 +50,6 @@ syntax Expr
     | non-assoc Expr l "\>=" Expr r
     | non-assoc Expr l "==" Expr r
     | non-assoc Expr l "!=" Expr r)
-    
   ; 
   
 syntax Type 
@@ -59,7 +58,7 @@ syntax Type
 ;
 
 lexical Str 
-= [\"][a-zA-Z_\ 0-9?]*[\"]  
+= [\"][a-zA-Z_\ :0-9?]*[\"]  
 ;
 
 lexical Int 

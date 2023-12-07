@@ -14,7 +14,8 @@ data AForm(loc src = |tmp:///|)
 data AQuestion(loc src = |tmp:///|)
   = question(str name, AIdent ident, AType typ)  
   | question(str name, AIdent ident, AType typ, AExpr e)
-  | question()
+  | question(AExpr conditional, list[AQuestion] thenBlock)
+  | question(AExpr conditional, list[AQuestion] thenBlock, list[AQuestion] elseBlock)
   ; 
 
 

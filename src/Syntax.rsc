@@ -13,8 +13,12 @@ start syntax Form
 ;
 // TODO: question, computed question, block, if-then-else, if-then
 syntax Question 
-= Str s Ident name [:] Type t "="? Expr?
+= Str s Ident name [:] Type t QuestionAutoCalcu? q
 | Ifthenelse
+;
+
+syntax QuestionAutoCalcu
+= [=] Expr e
 ;
 
 syntax Ifthenelse
@@ -23,20 +27,21 @@ syntax Ifthenelse
 
 
 syntax Ifthen
-= "if" "(" Ident i") {" Question* questions "}"
+= "if" [(] Expr e[)] [{] Question* questions [}]
 ;
 
 
-
 syntax Else
-= "else {" Question* questions "}"
+= "else" "{" Question* questions "}"
 ;
 
 // TODO: +, -, *, /, &&, ||, !, >, <, <=, >=, ==, !=, literals (bool, int, str)
 // Think about disambiguation using priorities and associativity
 // and use C/Java style precedence rules (look it up on the internet)
 syntax Expr 
-  = a :Ident 
+  = a :Ident
+  | Int b
+  | [(] Expr e [)]
   >left (left Expr l "*"  Expr r
     | left Expr l "/" Expr r)  
   > left (left Expr l "+" Expr r

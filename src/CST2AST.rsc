@@ -30,10 +30,9 @@ default AQuestion cst2ast(Question q) {
     case(Question)`<Str s> <Ident name> : <Type ty> = <Expr e>`: 
       return question("<s>", id("<name>", src=name.src), cst2ast(ty), cst2ast(e), src=q.src);
     case(Question)`if ( <Expr e>) { <Question* questions1> } else { <Question* questions2> }`:
-      return question(cst2ast(e), [cst2ast(qr)| qr <- questions1], [cst2ast(qb)| qb <- questions2], src=q.src);
+      return question(cst2ast(e), [cst2ast(qr)| qr <- questions1], [cst2ast(qb) | qb <- questions2], src=q.src);
     case(Question)`if ( <Expr e>) { <Question* questions1> }`:
-      return question(cst2ast(e), [cst2ast(qr)| qr <- questions1], src=q.src);
-      
+      return question(cst2ast(e), [cst2ast(qr)| qr <- questions1], src=q.src);      
 
     default: throw "Not yet implemented <q>";
   }

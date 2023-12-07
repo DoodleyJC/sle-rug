@@ -9,31 +9,13 @@ extend lang::std::Id;
 
 start syntax Form 
   = "form" Ident name "{" Question* questions "}"
-  | "HI"
 ;
 // TODO: question, computed question, block, if-then-else, if-then
 syntax Question 
-= Str s Ident name [:] Type t QuestionAutoCalcu? q
-| Ifthenelse
+= Str s Ident name [:] Type t ([=] Expr e)?
+| "if" [(] Expr e[)] [{] Question* questions1 [}] ("else" "{" Question* questions2 "}")?
 ;
 
-syntax QuestionAutoCalcu
-= [=] Expr e
-;
-
-syntax Ifthenelse
-= Ifthen Else?
-;
-
-
-syntax Ifthen
-= "if" [(] Expr e[)] [{] Question* questions [}]
-;
-
-
-syntax Else
-= "else" "{" Question* questions "}"
-;
 
 // TODO: +, -, *, /, &&, ||, !, >, <, <=, >=, ==, !=, literals (bool, int, str)
 // Think about disambiguation using priorities and associativity

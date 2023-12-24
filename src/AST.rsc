@@ -28,7 +28,8 @@ data AExpr(loc src = |tmp:///|)
 
 
 data AIdent(loc src = |tmp:///|)
-  = id(str name);
+  = id(str name)
+  ;
 
 data AType(loc src = |tmp:///|)
   = atype(str name)

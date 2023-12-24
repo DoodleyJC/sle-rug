@@ -4,3 +4,6 @@ import ParseTree;
 parse(#start[Form], |project://sle-rug/examples/tax.myql|);
 
 cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|));
+
+resolve(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)));
+

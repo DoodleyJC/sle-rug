@@ -11,9 +11,26 @@ start syntax Form
   = "form" Ident name "{" Question* questions "}"
 ;
 // TODO: question, computed question, block, if-then-else, if-then
-syntax Question 
+/*
+syntax QuestionDepr
 = Str s Ident name [:] Type t ([=] Expr e)?
-| "if" [(] Expr e[)] [{] Question* questions1 [}] ("else" "{" Question* questions2 "}")?
+| "if" "(" Expr e")" "{" Question* questions1 "}" ("else" "{" Question* questions2 "}")?
+;
+*/
+syntax Question
+= Str s Ident name ":" Type t
+| Str s Ident name ":" Type t "=" Expr e
+| IfThen
+| IfThenElse
+;
+
+
+syntax IfThen
+= "if" "(" Expr e")" "{" Question* questions1 "}"
+;
+
+syntax IfThenElse
+= IfThen "else" "{" Question* questions1 "}"
 ;
 
 

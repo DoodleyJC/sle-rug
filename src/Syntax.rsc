@@ -26,7 +26,7 @@ syntax Question
 
 
 syntax IfThen
-= "if" "(" Expr e")" "{" Question* questions1 "}"
+= "if" "(" Expr e ")" "{" Question* questions1 "}"
 ;
 
 syntax IfThenElse

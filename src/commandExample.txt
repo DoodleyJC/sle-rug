@@ -2,3 +2,5 @@ import IDE;
 import Syntax;
 import ParseTree;
 parse(#start[Form], |project://sle-rug/examples/tax.myql|);
+
+cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|));

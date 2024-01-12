@@ -22,6 +22,7 @@ data AQuestion(loc src = |tmp:///|)
 data AExpr(loc src = |tmp:///|)
   = ref(AIdent id)
   | ref(int n)
+  | ref(bool b)
   | ref(AExpr other)
   | ref(AExpr lhs, AExpr rhs)
   ;

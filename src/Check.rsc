@@ -39,6 +39,18 @@ Type checkType(Type typ){
   }
 }
 
+str typeToString(Type typ){
+  if(typ == tbool()){
+    return "bool";
+  } else if(typ == tint()){
+    return "int";
+  } else if(typ == tstr()) {
+    return "str";
+  } else {
+    return "unknown";
+  }
+}
+
 // To avoid recursively traversing the form, use the `visit` construct
 // or deep match (e.g., `for (/question(...) := f) {...}` ) 
 TEnv collect(AForm f) {
@@ -80,19 +92,15 @@ set[Message] check(AQuestion q, TEnv tenv, UseDef useDef) {
           msgs += { error("Questions with same name and different types", id.src) };
         }
       }
-
-      int labelCnt = 0;
-
+      
+      set[str] encounteredLabels = {};
       // Check for duplicate labels
-      for (<_, _, str label, _> <- tenv) {
-        if (label_q == label) {
-          labelCnt += 1;
-        }
-      }
+      if (label_q in encounteredLabels) {
+        msgs += { warning("Duplicate labels detected", id.src) };
+      } else {
+        encounteredLabels += label_q;
+      }
 
-      if (labelCnt > 1) {
-        msgs += { warning("Duplicate labels", id.src) };
-      }
     }
     case question(str label_q, AIdent id, AType qType, AExpr expr):
     {
@@ -152,7 +160,6 @@ set[Message] check(AQuestion q, TEnv tenv, UseDef useDef) {
 //   the requirement is that typeOf(lhs) == typeOf(rhs) == tint()
 set[Message] check(AExpr e, TEnv tenv, UseDef useDef) {
   set[Message] msgs = {};
-
   switch (e) {
     case ref(AIdent x): {
       msgs += { error("Undeclared question", x.src) | useDef[x.src] == {} };
@@ -164,9 +171,10 @@ set[Message] check(AExpr e, TEnv tenv, UseDef useDef) {
       b;
     }
     case ref(AExpr left, AExpr right): {
-      println("binOp check");
       Type lhsType = typeOf(left, tenv, useDef);
       Type rhsType = typeOf(right, tenv, useDef);
+      println(typeToString(lhsType)); 
+      println(typeToString(rhsType));
       if (lhsType != tint() || rhsType != tint()) {
         msgs += { error("Attempting binary operation on non numeric types", e.src) };
       }

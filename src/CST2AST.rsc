@@ -43,6 +43,7 @@ AExpr cst2ast(Expr e) {
   switch (e) {
     case (Expr)`<Ident x>`: return ref(id("<x>", src=x.src), src=x.src);
     case (Expr)`<Int b>` : return ref(toInt("<b>"), src=b.src);
+    case (Expr)`<Bool b>` : return ref(toBool("<b>"), src=b.src);
     case (Expr)`(<Expr ex>)` : return ref(cst2ast(ex), src=e.src);
     case (Expr)`<Expr l> *  <Expr r>`: return ref(cst2ast(l), cst2ast(r), src=e.src);
     case (Expr)`<Expr l> / <Expr r>`: return ref(cst2ast(l), cst2ast(r), src=e.src);
@@ -59,6 +60,14 @@ AExpr cst2ast(Expr e) {
     case (Expr)`<Expr l> != <Expr r>`: return ref(cst2ast(l), cst2ast(r), src=e.src);
     default: throw "Unhandled expression: <e>";
   }
+}
+
+bool toBool(str input) {
+    switch (input) {
+        case "true": return true;
+        case "false": return false;
+        default: throw "Invalid boolean representation: " + input;
+    }
 }
 
 default AType cst2ast(Type t) {

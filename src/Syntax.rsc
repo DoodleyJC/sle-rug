@@ -40,6 +40,7 @@ syntax IfThenElse
 syntax Expr 
   = a :Ident
   | Int b
+  | Bool
   | [(] Expr e [)]
   >left (left Expr l "*"  Expr r
     | left Expr l "/" Expr r)  

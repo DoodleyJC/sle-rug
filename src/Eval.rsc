@@ -24,10 +24,28 @@ alias VEnv = map[str name, Value \value];
 data Input
   = input(str question, Value \value);
   
+
+Value uninitValue(str typ) {
+    if(typ == "integer") {return vint(0);}
+    if(typ == "boolean") {return vbool(false);}
+    if(typ == "str") {return vstr("");}
+    throw "Unknown";
+}
+
+
 // produce an environment which for each question has a default value
 // (e.g. 0 for int, "" for str etc.)
 VEnv initialEnv(AForm f) {
-  return ();
+  VEnv venv = ();
+  
+  visit(f) {
+    case question(_, AIdent id, AType typ):
+      venv[id.name] = uninitValue(typ.name);
+    case question(_, AIdent id, _, AExpr expr):
+      venv[id.name] = eval(expr, venv);
+  }
+
+  return venv;
 }
 
 
@@ -40,21 +58,100 @@ VEnv eval(AForm f, Input inp, VEnv venv) {
 }
 
 VEnv evalOnce(AForm f, Input inp, VEnv venv) {
-  return (); 
+  visit(f) {
+    case form(_, list[AQuestion] questions): {
+      for(AQuestion question <- questions) {
+        venv = eval(question, inp, venv);
+      }
+    }
+  }
+
+  return venv; 
 }
+
+
+bool transformValueToBool(Value val) {
+    switch (val) {
+        case vbool(b): return b;
+        default: throw "Expected boolean, got other type";
+    }
+}
+
+int transformValueToInt(Value v) {
+  switch (v) {
+    case vint(n): return n;
+    default: throw "Expected integer, got other type";
+  }
+}
+
+
 
 VEnv eval(AQuestion q, Input inp, VEnv venv) {
   // evaluate conditions for branching,
   // evaluate inp and computed questions to return updated VEnv
-  return (); 
+  visit(q) {
+    case question(_, AIdent id, _): {
+      if (id.name == inp.question) {
+        venv[id.name] = inp.\value;
+      }
+    }
+    case question(_, AIdent id, _, AExpr expr): {
+      if (id.name == inp.question) {
+        venv[id.name] = inp.\value;
+      } else {
+      venv[id.name] = eval(expr, venv);
+      }
+    }
+    case question(AExpr expr, list[AQuestion] ifBody): {
+      if(transformValueToBool(eval(expr, venv))) {
+        for(AQuestion question <- ifBody) {
+          venv = eval(question, inp, venv);
+        }
+      }
+    }
+    case question(AExpr expr, list[AQuestion] ifBody, list[AQuestion] elseBody): {
+      if(transformValueToBool(eval(expr, venv))) {
+        for(AQuestion question <- ifBody) {
+          venv = eval(question, inp, venv);
+        }
+      } else {
+        for(AQuestion question <- elseBody) {
+          venv = eval(question, inp, venv);
+        }
+      }
+    }
+  }
+  return venv;
 }
 
+
+Value eval(AExpr e, VEnv venv) {return vint(0); }
+
+
+
+
 Value eval(AExpr e, VEnv venv) {
-  switch (e) {
-    case ref(id(str x)): return venv[x];
-    
-    // etc.
-    
-    default: throw "Unsupported expression <e>";
+   switch (e) {
+    case ref(id(str x)): { return venv[x]; }
+    case ref(int x): { return vint(x); }
+    case ref(AExpr lhs, str op, AExpr rhs): {
+      Value left = eval(lhs, venv);
+      Value right = eval(rhs, venv);
+      return evalOperator(left, op, right);
+    }
+   }
+   return vint(0);
+}
+
+Value evalOperator(Value left, str operator, Value right) {
+  switch (operator) {
+    case "+": return vint(transformValueToInt(left) + transformValueToInt(right));
+    case "-": return vint(transformValueToInt(left) - transformValueToInt(right));
+    case "*": return vint(transformValueToInt(left) * transformValueToInt(right));
+    case "/": return vint(transformValueToInt(left) / transformValueToInt(right));
+
+    default: throw "ERR: <operator>";
   }
 }
+
+

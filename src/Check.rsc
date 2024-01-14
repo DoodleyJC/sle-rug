@@ -170,7 +170,7 @@ set[Message] check(AExpr e, TEnv tenv, UseDef useDef) {
     case ref(bool b): {
       b;
     }
-    case ref(AExpr left, AExpr right): {
+    case ref(AExpr left, str op, AExpr right): {
       Type lhsType = typeOf(left, tenv, useDef);
       Type rhsType = typeOf(right, tenv, useDef);
       println(typeToString(lhsType)); 
@@ -194,7 +194,7 @@ Type typeOf(AExpr e, TEnv tenv, UseDef useDef) {
     case ref(int _): {
       return tint();
     }
-    case ref(AExpr left, AExpr right): {
+    case ref(AExpr left, str op, AExpr right): {
       Type lhsType = typeOf(left, tenv, useDef);
       Type rhsType = typeOf(right, tenv, useDef);
 

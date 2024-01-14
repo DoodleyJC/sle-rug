@@ -24,7 +24,7 @@ data AExpr(loc src = |tmp:///|)
   | ref(int n)
   | ref(bool b)
   | ref(AExpr other)
-  | ref(AExpr lhs, AExpr rhs)
+  | ref(AExpr lhs, str op, AExpr rhs)
   ;
 
 

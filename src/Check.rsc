@@ -18,9 +18,9 @@ alias TEnv = rel[loc def, str name, str label, Type \type];
 Type transformTypeName(str typ){
   if(typ == "boolean"){
     return tbool();
-  } else if(typ == "int"){
+  } else if(typ == "integer"){
     return tint();
-  } else if(typ == "str") {
+  } else if(typ == "string") {
     return tstr();
   } else {
     return tunknown();
@@ -84,11 +84,11 @@ set[Message] check(AQuestion q, TEnv tenv, UseDef useDef) {
   set[Message] msgs = {};
 
   switch(q) {
-    case question(str label_q, AIdent id, AType qType):
+    case question(str label_q, AIdent id, AType qTyp):
     {
       // Check for same name but different types
-      for (<_, str name, _, Type myType> <- tenv) {
-        if (name == id.name && transformTypeName(qType.name) != myType) {
+      for (<_, str name, _, Type typ> <- tenv) {
+        if (name == id.name && transformTypeName(qTyp.name) != typ) {
           msgs += { error("Questions with same name and different types", id.src) };
         }
       }
@@ -102,11 +102,11 @@ set[Message] check(AQuestion q, TEnv tenv, UseDef useDef) {
       }
 
     }
-    case question(str label_q, AIdent id, AType qType, AExpr expr):
+    case question(str label_q, AIdent id, AType qTyp, AExpr expr):
     {
       // Check for same name but different types
-      for (<_, str name, _, Type myType> <- tenv) {
-        if (name == id.name && transformTypeName(qType.name) != myType) {
+      for (<_, str name, _, Type typ> <- tenv) {
+        if (name == id.name && transformTypeName(qTyp.name) != typ) {
           msgs += { error("Questions with same name and different types", id.src) };
         }
       }
@@ -125,10 +125,10 @@ set[Message] check(AQuestion q, TEnv tenv, UseDef useDef) {
       }
 
       // Check that type of Expression expre matches with type of Question q
-      if(typeOf(expr, tenv, useDef) != transformTypeName(qType.name)) {
-        msgs += { error("The Type of the question doe not match the type of the expression", id.src) };
+      if(typeOf(expr, tenv, useDef) != transformTypeName(qTyp.name)) {
+        msgs += { error("The Type of the question does not match the type of the expression", id.src) };
       }
-      check(expr, tenv, useDef); // Call semantic check on expression!!!
+      msgs += check(expr, tenv, useDef); // Call semantic check on expression!!!
 
     }
     // IF statements
@@ -173,9 +173,7 @@ set[Message] check(AExpr e, TEnv tenv, UseDef useDef) {
     case ref(AExpr left, str op, AExpr right): {
       Type lhsType = typeOf(left, tenv, useDef);
       Type rhsType = typeOf(right, tenv, useDef);
-      println(typeToString(lhsType)); 
-      println(typeToString(rhsType));
-      if (lhsType != tint() || rhsType != tint()) {
+      if (lhsType != tint()) {
         msgs += { error("Attempting binary operation on non numeric types", e.src) };
       }
     }

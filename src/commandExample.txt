@@ -12,3 +12,4 @@ check(  cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)),
         resolve(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|))).useDef);
 
 check( cst2ast(parse(#start[Form], |project://sle-rug/examples/NonMatchingOperandTypes.myql|)), collect(cst2ast(parse(#start[Form], |project://sle-rug/examples/NonMatchingOperandTypes.myql|))), resolve(cst2ast(parse(#start[Form], |project://sle-rug/examples/NonMatchingOperandTypes.myql|))).useDef);
+

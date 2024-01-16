@@ -194,6 +194,9 @@ Type typeOf(AExpr e, TEnv tenv, UseDef useDef) {
     case ref(int _): {
       return tint();
     }
+    case ref(bool _): {
+      return tbool();
+    }
     case ref(AExpr left, str op, AExpr right): {
       Type lhsType = typeOf(left, tenv, useDef);
       Type rhsType = typeOf(right, tenv, useDef);

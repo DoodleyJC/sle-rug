@@ -143,6 +143,15 @@ Value evalOperator(Value left, str operator, Value right) {
     case "-": return vint(transformValueToInt(left) - transformValueToInt(right));
     case "*": return vint(transformValueToInt(left) * transformValueToInt(right));
     case "/": return vint(transformValueToInt(left) / transformValueToInt(right));
+    case "!": return vbool(!transformValueToBool(left));
+    case "&&": return vbool(transformValueToBool(left) && transformValueToBool(right));
+    case "||": return vbool(transformValueToBool(left) || transformValueToBool(right));
+    case "\<": return vbool(transformValueToInt(left) < transformValueToInt(right));
+    case "\<=": return vbool(transformValueToInt(left) <= transformValueToInt(right));
+    case "\>": return vbool(transformValueToInt(left) > transformValueToInt(right));
+    case "\>=": return vbool(transformValueToInt(left) >= transformValueToInt(right));
+    case "==": return vbool(transformValueToInt(left) == transformValueToInt(right));
+    case "!=": return vbool(transformValueToInt(left) != transformValueToInt(right));
 
     default: throw "ERR: <operator>";
   }

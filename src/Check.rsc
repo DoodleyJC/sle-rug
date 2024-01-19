@@ -84,8 +84,7 @@ set[Message] check(AQuestion q, TEnv tenv, UseDef useDef) {
   set[Message] msgs = {};
 
   switch(q) {
-    case question(str label_q, AIdent id, AType qTyp):
-    {
+    case question(str label_q, AIdent id, AType qTyp): {
       // Check for same name but different types
       for (<_, str name, _, Type typ> <- tenv) {
         if (name == id.name && transformTypeName(qTyp.name) != typ) {
@@ -102,8 +101,7 @@ set[Message] check(AQuestion q, TEnv tenv, UseDef useDef) {
       }
 
     }
-    case question(str label_q, AIdent id, AType qTyp, AExpr expr):
-    {
+    case question(str label_q, AIdent id, AType qTyp, AExpr expr): {
       // Check for same name but different types
       for (<_, str name, _, Type typ> <- tenv) {
         if (name == id.name && transformTypeName(qTyp.name) != typ) {
@@ -131,16 +129,14 @@ set[Message] check(AQuestion q, TEnv tenv, UseDef useDef) {
       msgs += check(expr, tenv, useDef); // Call semantic check on expression!!!
 
     }
-    // IF statements
-    case question(AExpr expr, list[AQuestion] ifQuestions):
-    {
+
+    case ifQuestion(AExpr expr, list[AQuestion] ifQuestions): {
       for(AQuestion q <- ifQuestions) {
         msgs += check(q, tenv, useDef); 
       }
     }
-    // IF ELSE statements
-    case question(AExpr expr, list[AQuestion] ifBody, list[AQuestion] elseBody):
-    {
+
+    case ifElseQuestion(AExpr expr, list[AQuestion] ifBody, list[AQuestion] elseBody): {
       for(AQuestion q <- ifBody) {
         msgs += check(q, tenv, useDef); 
       }
@@ -164,13 +160,13 @@ set[Message] check(AExpr e, TEnv tenv, UseDef useDef) {
     case ref(AIdent x): {
       msgs += { error("Undeclared question", x.src) | useDef[x.src] == {} };
     }
-    case ref(int n): {
+    case inte(int n): {
       n;
     }
-    case ref(bool b): {
+    case boo(bool b): {
       b;
     }
-    case ref(AExpr left, str op, AExpr right): {
+    case binary(AExpr left, str op, AExpr right): {
       Type lhsType = typeOf(left, tenv, useDef);
       Type rhsType = typeOf(right, tenv, useDef);
       if (lhsType != tint()) {
@@ -189,13 +185,13 @@ Type typeOf(AExpr e, TEnv tenv, UseDef useDef) {
       if (<u, loc d> <- useDef, <d, x, _, Type t> <- tenv) {
         return t;
       }
-    case ref(int _): {
+    case inte(int _): {
       return tint();
     }
-    case ref(bool _): {
+    case boo(bool _): {
       return tbool();
     }
-    case ref(AExpr left, str op, AExpr right): {
+    case binary(AExpr left, str op, AExpr right): {
       Type lhsType = typeOf(left, tenv, useDef);
       Type rhsType = typeOf(right, tenv, useDef);
 
@@ -210,7 +206,7 @@ Type typeOf(AExpr e, TEnv tenv, UseDef useDef) {
       }
 
     }
-    case ref(AExpr expr): {
+    case unary(AExpr expr): {
       Type exprType = typeOf(expr, tenv, useDef);
       return checkType(exprType);
     }

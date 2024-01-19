@@ -14,17 +14,17 @@ data AForm(loc src = |tmp:///|)
 data AQuestion(loc src = |tmp:///|)
   = question(str name, AIdent ident, AType typ)  
   | question(str name, AIdent ident, AType typ, AExpr e)
-  | question(AExpr conditional, list[AQuestion] thenBlock)
-  | question(AExpr conditional, list[AQuestion] thenBlock, list[AQuestion] elseBlock)
+  | ifQuestion(AExpr conditional, list[AQuestion] thenBlock)
+  | ifElseQuestion(AExpr conditional, list[AQuestion] thenBlock, list[AQuestion] elseBlock)
   ; 
 
 
 data AExpr(loc src = |tmp:///|)
   = ref(AIdent id)
-  | ref(int n)
-  | ref(bool b)
-  | ref(AExpr other)
-  | ref(AExpr lhs, str op, AExpr rhs)
+  | inte(int n)
+  | boo(bool b)
+  | unary(AExpr other)
+  | binary(AExpr lhs, str op, AExpr rhs)
   ;
 
 

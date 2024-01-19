@@ -102,14 +102,14 @@ VEnv eval(AQuestion q, Input inp, VEnv venv) {
       venv[id.name] = eval(expr, venv);
       }
     }
-    case question(AExpr expr, list[AQuestion] ifBody): {
+    case ifQuestion(AExpr expr, list[AQuestion] ifBody): {
       if(transformValueToBool(eval(expr, venv))) {
         for(AQuestion question <- ifBody) {
           venv = eval(question, inp, venv);
         }
       }
     }
-    case question(AExpr expr, list[AQuestion] ifBody, list[AQuestion] elseBody): {
+    case ifElseQuestion(AExpr expr, list[AQuestion] ifBody, list[AQuestion] elseBody): {
       if(transformValueToBool(eval(expr, venv))) {
         for(AQuestion question <- ifBody) {
           venv = eval(question, inp, venv);
@@ -127,8 +127,8 @@ VEnv eval(AQuestion q, Input inp, VEnv venv) {
 Value eval(AExpr e, VEnv venv) {
    switch (e) {
     case ref(id(str x)): { return venv[x]; }
-    case ref(int x): { return vint(x); }
-    case ref(AExpr lhs, str op, AExpr rhs): {
+    case inte(int x): { return vint(x); }
+    case binary(AExpr lhs, str op, AExpr rhs): {
       Value left = eval(lhs, venv);
       Value right = eval(rhs, venv);
       return evalOperator(left, op, right);

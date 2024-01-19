@@ -30,9 +30,9 @@ default AQuestion cst2ast(Question q) {
     case(Question)`<Str s> <Ident name> : <Type ty> = <Expr e>`: 
       return question("<s>", id("<name>", src=name.src), cst2ast(ty), cst2ast(e), src=q.src);
     case(Question)`if ( <Expr e>) { <Question* questions1> } else { <Question* questions2> }`:
-      return question(cst2ast(e), [cst2ast(qr)| qr <- questions1], [cst2ast(qb) | qb <- questions2], src=q.src);
+      return ifElseQuestion(cst2ast(e), [cst2ast(qr)| qr <- questions1], [cst2ast(qb) | qb <- questions2], src=q.src);
     case(Question)`if ( <Expr e>) { <Question* questions1> }`:
-      return question(cst2ast(e), [cst2ast(qr)| qr <- questions1], src=q.src);      
+      return ifQuestion(cst2ast(e), [cst2ast(qr)| qr <- questions1], src=q.src);      
 
     default: throw "Not yet implemented <q>";
   }
@@ -42,22 +42,22 @@ default AQuestion cst2ast(Question q) {
 AExpr cst2ast(Expr e) {
   switch (e) {
     case (Expr)`<Ident x>`: return ref(id("<x>", src=x.src), src=x.src);
-    case (Expr)`<Int b>` : return ref(toInt("<b>"), src=b.src);
-    case (Expr)`<Bool b>` : return ref(toBool("<b>"), src=b.src);
-    case (Expr)`(<Expr ex>)` : return ref(cst2ast(ex), src=e.src);
-    case (Expr)`<Expr l> *  <Expr r>`: return ref(cst2ast(l), "*", cst2ast(r), src=e.src);
-    case (Expr)`<Expr l> / <Expr r>`: return ref(cst2ast(l), "/", cst2ast(r), src=e.src);
-    case (Expr)`<Expr l> + <Expr r>`: return ref(cst2ast(l), "+", cst2ast(r), src=e.src);
-    case (Expr)`<Expr l> - <Expr r>`: return ref(cst2ast(l), "-", cst2ast(r), src=e.src);
-    case (Expr)`! <Expr r>`: return ref(cst2ast(r), src=e.src);
-    case (Expr)`<Expr l> || <Expr r>`: return ref(cst2ast(l), "||", cst2ast(r), src=e.src);
-    case (Expr)`<Expr l> && <Expr r>`: return ref(cst2ast(l), "&&", cst2ast(r), src=e.src);
-    case (Expr)`<Expr l> \< <Expr r>`: return ref(cst2ast(l), "\<", cst2ast(r), src=e.src);
-    case (Expr)`<Expr l> \> <Expr r>`: return ref(cst2ast(l), "\>", cst2ast(r), src=e.src);
-    case (Expr)`<Expr l> \<= <Expr r>`: return ref(cst2ast(l), "\<=", cst2ast(r), src=e.src);
-    case (Expr)`<Expr l> \>= <Expr r>`: return ref(cst2ast(l), "\>=", cst2ast(r), src=e.src);
-    case (Expr)`<Expr l> == <Expr r>`: return ref(cst2ast(l), "==", cst2ast(r), src=e.src);
-    case (Expr)`<Expr l> != <Expr r>`: return ref(cst2ast(l), "!=", cst2ast(r), src=e.src);
+    case (Expr)`<Int b>` : return inte(toInt("<b>"), src=b.src);
+    case (Expr)`<Bool b>` : return boo(toBool("<b>"), src=b.src);
+    case (Expr)`(<Expr ex>)` : return unary(cst2ast(ex), src=e.src);
+    case (Expr)`<Expr l> *  <Expr r>`: return binary(cst2ast(l), "*", cst2ast(r), src=e.src);
+    case (Expr)`<Expr l> / <Expr r>`: return binary(cst2ast(l), "/", cst2ast(r), src=e.src);
+    case (Expr)`<Expr l> + <Expr r>`: return binary(cst2ast(l), "+", cst2ast(r), src=e.src);
+    case (Expr)`<Expr l> - <Expr r>`: return binary(cst2ast(l), "-", cst2ast(r), src=e.src);
+    case (Expr)`! <Expr r>`: return unary(cst2ast(r), src=e.src);
+    case (Expr)`<Expr l> || <Expr r>`: return binary(cst2ast(l), "||", cst2ast(r), src=e.src);
+    case (Expr)`<Expr l> && <Expr r>`: return binary(cst2ast(l), "&&", cst2ast(r), src=e.src);
+    case (Expr)`<Expr l> \< <Expr r>`: return binary(cst2ast(l), "\<", cst2ast(r), src=e.src);
+    case (Expr)`<Expr l> \> <Expr r>`: return binary(cst2ast(l), "\>", cst2ast(r), src=e.src);
+    case (Expr)`<Expr l> \<= <Expr r>`: return binary(cst2ast(l), "\<=", cst2ast(r), src=e.src);
+    case (Expr)`<Expr l> \>= <Expr r>`: return binary(cst2ast(l), "\>=", cst2ast(r), src=e.src);
+    case (Expr)`<Expr l> == <Expr r>`: return binary(cst2ast(l), "==", cst2ast(r), src=e.src);
+    case (Expr)`<Expr l> != <Expr r>`: return binary(cst2ast(l), "!=", cst2ast(r), src=e.src);
     default: throw "Unhandled expression: <e>";
   }
 }

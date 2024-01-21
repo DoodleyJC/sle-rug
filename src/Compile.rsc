@@ -20,13 +20,65 @@ import lang::html::IO;
  */
 
 void compile(AForm f) {
-  writeFile(f.src[extension="js"].top, form2js(f));
+  //writeFile(f.src[extension="js"].top, form2js(f)); //dont you dare forget to uncomment this
   writeFile(f.src[extension="html"].top, writeHTMLString(form2html(f)));
 }
 
-HTMLElement form2html(AForm f) {
-  return html([]);
+void compileTest(){
+  writeFile(|project://sle-rug/HTMLoutput/test|[extension="html"].top, writeHTMLString(testhtml()));
 }
+
+HTMLElement form2html(AForm f) {
+  HTMLhead = head([]);
+  bodyList = [];
+  visit(f){
+    case form(_, list[AQuestion] listQuestions):
+    {
+      bodyList += ([] | it + testHTMLQuestion(que) | que <- listQuestions);
+    }
+  }
+  println(bodyList);
+  return html([head([]), body(bodyList)]);
+}
+
+HTMLElement testhtml(){
+  HTMLElement input1 = input();
+  input1.label = "test";
+  input1.\type = "checkbox";
+  return html([head([]), body([input1])]);
+}
+
+
+list[HTMLElement] testHTMLQuestion(AQuestion q){
+  bodyList = [];
+  visit(q){
+    case question(str name, AIdent id, _):
+    {
+      bodyList += h1([text(name)]);
+      HTMLElement htmlQuestion = input();
+      htmlQuestion.label = "cute";
+      htmlQuestion.id = id.name;
+      htmlQuestion.\type = "checkbox";
+      bodyList += htmlQuestion;
+      println("HELLOOOOO");
+    }
+    case question(str name, AIdent id, _, _):
+    {
+      bodyList += h1([text(name)]);
+      HTMLElement htmlQuestion = input();
+      htmlQuestion.label = "cute";
+      htmlQuestion.id = id.name;
+      htmlQuestion.\type = "checkbox";
+      bodyList += htmlQuestion;
+      println( "HELLOOOOOOOO");
+    }
+    default:
+    ;
+  }
+  println(bodyList);
+  return bodyList;
+}
+
 
 str form2js(AForm f) {
   return "";

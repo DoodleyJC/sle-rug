@@ -15,3 +15,7 @@ check( cst2ast(parse(#start[Form], |project://sle-rug/examples/NonMatchingOperan
 
 eval(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)), input("sellingPrice", vint(100)), eval(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)), input("hasBoughtHouse", vbool(true)), initialEnv(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)))));
 
+
+flatten(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)));
+
+rename(parse(#start[Form], |project://sle-rug/examples/tax.myql|), |project://sle-rug/examples/tax.myql|(268,12,<9,5>,<9,17>), "soldHouse", resolve(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)))<2>);

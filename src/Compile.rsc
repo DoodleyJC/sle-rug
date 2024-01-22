@@ -20,25 +20,24 @@ import lang::html::IO;
  */
 
 void compile(AForm f) {
-  //writeFile(f.src[extension="js"].top, form2js(f)); //dont you dare forget to uncomment this
+  writeFile(f.src[extension="js"].top, form2js(f)); //dont you dare forget to uncomment this
   writeFile(f.src[extension="html"].top, writeHTMLString(form2html(f)));
 }
 
-void compileTest(){
-  writeFile(|project://sle-rug/HTMLoutput/test|[extension="html"].top, writeHTMLString(testhtml()));
-}
-
 HTMLElement form2html(AForm f) {
-  HTMLhead = head([]);
+  HTMLElement scriptElem = script([]);
+  scriptElem.src = f.name + ".js";
+  HTMLhead = head([scriptElem]);
   bodyList = [];
   visit(f){
     case form(_, list[AQuestion] listQuestions):
     {
-      bodyList += ([] | it + testHTMLQuestion(que) | que <- listQuestions);
+      bodyList += ([] | it + compileQuestionHTML(que) | que <- listQuestions);
     }
   }
   println(bodyList);
-  return html([head([]), body(bodyList)]);
+  println(li(bodyList));
+  return html([HTMLhead, body([ol(bodyList)])]);
 }
 
 HTMLElement testhtml(){
@@ -49,37 +48,47 @@ HTMLElement testhtml(){
 }
 
 
-list[HTMLElement] testHTMLQuestion(AQuestion q){
-  bodyList = [];
-  visit(q){
+HTMLElement compileQuestionHTML(AQuestion q){
+  result = [];
+  innerHTML = [];
+switch(q){
+
+    case ifQuestion(_, _):
+    {
+      innerHTML += text("todo: add if block");
+    }
+    case ifElseQuestion(AExpr cond, list[AQuestion] thenQuestions, list[AQuestion] elseQuestions):{
+      innerHTML += text("todo: add ifelse block");
+    }
     case question(str name, AIdent id, _):
     {
-      bodyList += h1([text(name)]);
+      print("question printname: ");
+      println(name);
+      innerHTML += text(name); 
       HTMLElement htmlQuestion = input();
-      htmlQuestion.label = "cute";
       htmlQuestion.id = id.name;
       htmlQuestion.\type = "checkbox";
-      bodyList += htmlQuestion;
-      println("HELLOOOOO");
+      innerHTML += htmlQuestion;
     }
     case question(str name, AIdent id, _, _):
     {
-      bodyList += h1([text(name)]);
+      print("question w/ exp printname: ");
+      println(name);
+      innerHTML += text(name); 
       HTMLElement htmlQuestion = input();
-      htmlQuestion.label = "cute";
       htmlQuestion.id = id.name;
       htmlQuestion.\type = "checkbox";
-      bodyList += htmlQuestion;
-      println( "HELLOOOOOOOO");
+      innerHTML += htmlQuestion;
     }
+    
     default:
     ;
   }
-  println(bodyList);
-  return bodyList;
+  result += innerHTML;
+  return li(result);
 }
 
 
 str form2js(AForm f) {
-  return "";
+  return readFile(|project://sle-rug/src/test.js|);
 }

@@ -1,5 +1,5 @@
 module Transform
-
+import ParseTree;
 import Syntax;
 import Resolve;
 import AST;
@@ -29,8 +29,36 @@ import AST;
  */
  
 AForm flatten(AForm f) {
-  return f; 
+  return visit(f) {
+    case form(name, questions): {
+      return form(name, flattenListsOfQuestions(questions, Atrue()));
+    }
+  }; 
 }
+
+list[AQuestion] flattenListsOfQuestions(list[AQuestion] questions, AExpr prevGuard) {
+    list[AQuestion] flattened = [];
+    for (AQuestion q <- questions) {
+      switch(q) {
+        case ifQuestion(AExpr conditional, list[AQuestion] ifBody): {
+          flattened += flattenListsOfQuestions(ifBody, binary(prevGuard, "&&", conditional));
+        }
+        case ifElseQuestion(AExpr conditional, list[AQuestion] ifBody, list[AQuestion] elseBody): {
+          flattened += flattenListsOfQuestions(ifBody, binary(prevGuard, "&&", conditional));
+          flattened += flattenListsOfQuestions(elseBody, binary(prevGuard, "&&", unary(conditional)));
+        }
+        default: {
+          flattened += ifQuestion(prevGuard, [q]);
+        }
+      }
+    }
+    return flattened;
+}
+
+AExpr Atrue() {
+  return boo(true);
+}
+
 
 /* Rename refactoring:
  *
@@ -40,8 +68,22 @@ AForm flatten(AForm f) {
  */
  
 start[Form] rename(start[Form] f, loc useOrDef, str newName, UseDef useDef) {
-   return f; 
-} 
+  set[loc] locs = {};
+  locs += useOrDef;
+  locs += { l | (<loc l, useOrDef> <- useDef) };
+  locs += { l | (<useOrDef, loc l> <- useDef) };
+
+  if (locs == {}) {
+    return f;
+  }
+  
+  form = visit(f) {
+    case Id name => [Id] newName
+      when name.src in locs
+  }
+
+  return form;
+}
  
  
  

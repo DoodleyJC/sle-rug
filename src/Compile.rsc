@@ -26,7 +26,7 @@ void compile(AForm f) {
 
 HTMLElement form2html(AForm f) {
   HTMLElement scriptElem = script([]);
-  scriptElem.src = f.name + ".js";
+  scriptElem.src = f.src[extension="js"].top.file;
   HTMLhead = head([scriptElem]);
   bodyList = [];
   visit(f){
@@ -40,52 +40,50 @@ HTMLElement form2html(AForm f) {
   return html([HTMLhead, body([ol(bodyList)])]);
 }
 
-HTMLElement testhtml(){
-  HTMLElement input1 = input();
-  input1.label = "test";
-  input1.\type = "checkbox";
-  return html([head([]), body([input1])]);
-}
-
 
 HTMLElement compileQuestionHTML(AQuestion q){
-  result = [];
   innerHTML = [];
 switch(q){
 
-    case ifQuestion(_, _):
+    case ifQuestion(AExpr cond, list[AQuestion] thenBlock):
     {
-      innerHTML += text("todo: add if block");
+      return ifQuestionHTML(cond, thenBlock);
     }
     case ifElseQuestion(AExpr cond, list[AQuestion] thenQuestions, list[AQuestion] elseQuestions):{
-      innerHTML += text("todo: add ifelse block");
+      return ifElseQuestionHTML(cond, thenQuestions, elseQuestions);
     }
     case question(str name, AIdent id, _):
     {
-      print("question printname: ");
-      println(name);
-      innerHTML += text(name); 
-      HTMLElement htmlQuestion = input();
-      htmlQuestion.id = id.name;
-      htmlQuestion.\type = "checkbox";
-      innerHTML += htmlQuestion;
+
+      return checkBoxHTML(name, id);
     }
     case question(str name, AIdent id, _, _):
     {
-      print("question w/ exp printname: ");
-      println(name);
-      innerHTML += text(name); 
-      HTMLElement htmlQuestion = input();
-      htmlQuestion.id = id.name;
-      htmlQuestion.\type = "checkbox";
-      innerHTML += htmlQuestion;
+      return checkBoxHTML(name, id);
     }
     
     default:
     ;
   }
-  result += innerHTML;
-  return li(result);
+  return li([]);
+}
+
+
+HTMLElement checkBoxHTML(str name, AIdent id){
+  HTMLElement htmlQuestion = input();
+  htmlQuestion.id = id.name;
+  htmlQuestion.\type = "checkbox";
+  htmlQuestion.oninput = "updateValue(event)";
+  return li([text(name),htmlQuestion]);
+}
+
+
+HTMLElement ifQuestionHTML(AExpr cond, list[AQuestion] thenBlock){
+  return ol(([] | it + compileQuestionHTML(inner) | inner <- thenBlock));
+}
+
+HTMLElement ifElseQuestionHTML(AExpr cond, list[AQuestion] thenBlock, list[AQuestion] elseBlock){
+  return div([ifQuestionHTML(cond, thenBlock), ifQuestionHTML(cond, elseBlock)]);
 }
 
 

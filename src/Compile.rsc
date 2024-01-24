@@ -52,14 +52,14 @@ switch(q){
     case ifElseQuestion(AExpr cond, list[AQuestion] thenQuestions, list[AQuestion] elseQuestions):{
       return ifElseQuestionHTML(cond, thenQuestions, elseQuestions);
     }
-    case question(str name, AIdent id, _):
+    case question(str name, AIdent id, AType questionType):
     {
 
-      return checkBoxHTML(name, id);
+      return getHTMLElementQuestion(name, id, questionType);
     }
-    case question(str name, AIdent id, _, _):
+    case question(str name, AIdent id, AType questionType, _):
     {
-      return checkBoxHTML(name, id);
+      return getHTMLElementQuestion(name, id, questionType);
     }
     
     default:
@@ -69,13 +69,21 @@ switch(q){
 }
 
 
-HTMLElement checkBoxHTML(str name, AIdent id){
+HTMLElement getHTMLElementQuestion(str name, AIdent id, AType questionType){
   HTMLElement htmlQuestion = input();
   htmlQuestion.id = id.name;
-  htmlQuestion.\type = "checkbox";
+  switch(questionType.name){
+    case "boolean":{
+      htmlQuestion.\type = "checkbox";
+    }
+    case "integer": {
+      htmlQuestion.\type = "number";
+    }
+  }
   htmlQuestion.oninput = "updateValue(event)";
   return li([text(name),htmlQuestion]);
 }
+
 
 
 HTMLElement ifQuestionHTML(AExpr cond, list[AQuestion] thenBlock){
@@ -90,3 +98,5 @@ HTMLElement ifElseQuestionHTML(AExpr cond, list[AQuestion] thenBlock, list[AQues
 str form2js(AForm f) {
   return readFile(|project://sle-rug/src/test.js|);
 }
+
+

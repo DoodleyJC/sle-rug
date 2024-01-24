@@ -22,5 +22,10 @@ rename(parse(#start[Form], |project://sle-rug/examples/tax.myql|), |project://sl
 
 
 Following commands are to do the compiling:
+    import IDE;
+    import Syntax;
+    import ParseTree;
+    import CST2AST;
+    import Compile;
     f=cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|));
     compile(f);

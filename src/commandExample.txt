@@ -3,21 +3,21 @@ import Syntax;
 import ParseTree;
 parse(#start[Form], |project://sle-rug/examples/tax.myql|);
 
+CST2AST
 cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|));
 
+RESOLVE
 resolve(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)));
 
-check(  cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)),
-        collect(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|))),
-        resolve(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|))).useDef);
-
+CHECK
+check(  cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)), collect(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|))), resolve(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|))).useDef);
 check( cst2ast(parse(#start[Form], |project://sle-rug/examples/NonMatchingOperandTypes.myql|)), collect(cst2ast(parse(#start[Form], |project://sle-rug/examples/NonMatchingOperandTypes.myql|))), resolve(cst2ast(parse(#start[Form], |project://sle-rug/examples/NonMatchingOperandTypes.myql|))).useDef);
 
+EVAL
 eval(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)), input("sellingPrice", vint(100)), eval(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)), input("hasBoughtHouse", vbool(true)), initialEnv(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)))));
 
-
-flatten(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)));
-
+TRANSFORM
+flatten(cst2ast(parse(#start[Form], |project://sle-rug/examples/transformTest.myql|)));
 rename(parse(#start[Form], |project://sle-rug/examples/tax.myql|), |project://sle-rug/examples/tax.myql|(268,12,<9,5>,<9,17>), "soldHouse", resolve(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)))<2>);
 
 

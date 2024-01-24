@@ -77,12 +77,17 @@ start[Form] rename(start[Form] f, loc useOrDef, str newName, UseDef useDef) {
     return f;
   }
   
-  form = visit(f) {
-    case Id name => [Id] newName
-      when name.src in locs
+  return visit(f) {
+      case Ident id => replaceName(id, locs, newName)
   }
+}
 
-  return form;
+Ident replaceName(Ident id, set[loc] locations, str newName) {
+    if (id.src in locations) {
+        return [Ident]newName;
+    } else {
+        return id;
+    }
 }
  
  

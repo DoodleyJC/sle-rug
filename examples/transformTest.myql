@@ -1,7 +1,13 @@
-q0: "" int; 
-if (a) { 
-    if (b) { 
-        q1: "" int; 
-    } 
-    q2: "" int; 
+form transformExample { 
+  ""
+    n0: integer 
+   
+  if (true) {
+    if (false) {
+        ""
+        n1: integer
+    }
+    ""
+      n2: integer
+  }
 }

@@ -20,6 +20,8 @@ function updateValue(event){
     console.log(symbolTable);
 }
 
-function evaluateCondition(){
-    
+function updateValue(id, value){
+    symbolTable.set(id, value);
+    console.log(symbolTable);
 }
+

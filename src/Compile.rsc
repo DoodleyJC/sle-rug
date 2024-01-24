@@ -43,8 +43,7 @@ HTMLElement form2html(AForm f) {
 
 HTMLElement compileQuestionHTML(AQuestion q){
   innerHTML = [];
-switch(q){
-
+  switch(q){
     case ifQuestion(AExpr cond, list[AQuestion] thenBlock):
     {
       return ifQuestionHTML(cond, thenBlock);
@@ -75,12 +74,13 @@ HTMLElement getHTMLElementQuestion(str name, AIdent id, AType questionType){
   switch(questionType.name){
     case "boolean":{
       htmlQuestion.\type = "checkbox";
+      htmlQuestion.oninput = "updateValue(this.id, this.checked)";
     }
     case "integer": {
       htmlQuestion.\type = "number";
+      htmlQuestion.oninput = "updateValue(this.id, this.value)";
     }
   }
-  htmlQuestion.oninput = "updateValue(event)";
   return li([text(name),htmlQuestion]);
 }
 

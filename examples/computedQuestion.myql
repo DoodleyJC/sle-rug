@@ -1,0 +1,21 @@
+form computeTest{
+    "are you a cool person"
+        isCool: boolean
+
+    "how many homies do you have"
+        homies: integer
+    
+    "do you have additional homies"
+        addHomies: integer
+
+    "total homies:"
+        totalHomies: integer = homies + addHomies
+
+    if(totalHomies > 0){
+        "are you a real gee"
+            realgee: boolean
+    } else{
+        "you are not a real gee"
+            notarealgee: boolean = true
+    }
+}

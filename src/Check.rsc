@@ -133,7 +133,7 @@ set[Message] check(AQuestion q, TEnv tenv, UseDef useDef) {
     case ifQuestion(AExpr expr, list[AQuestion] ifQuestions): {
       msgs += check(expr, tenv, useDef); // Call semantic check on expression!!!
       if (typeOf(expr, tenv, useDef) != tbool()) {
-        msgs += { error("Non boolean in conditional statement") };
+        msgs += { error("Non boolean in conditional statement", expr.src) };
       }
 
       for(AQuestion q <- ifQuestions) {
@@ -144,7 +144,7 @@ set[Message] check(AQuestion q, TEnv tenv, UseDef useDef) {
     case ifElseQuestion(AExpr expr, list[AQuestion] ifBody, list[AQuestion] elseBody): {
       msgs += check(expr, tenv, useDef); // Call semantic check on expression!!!
       if (typeOf(expr, tenv, useDef) != tbool()) {
-        msgs += { error("Non boolean in conditional statement") };
+        msgs += { error("Non boolean in conditional statement", expr.src) };
       }
 
       for(AQuestion q <- ifBody) {
@@ -189,6 +189,12 @@ set[Message] check(AExpr e, TEnv tenv, UseDef useDef) {
       } else if ((op == "&&" || op == "||") && (lhsType != tbool() || rhsType != tbool())) {
         msgs += { error("Attempting boolean operation on non boolean types", e.src) };
       }
+    }
+    case unary(AExpr expr): {
+      Type exprType = typeOf(expr, tenv, useDef);
+      if (exprType != tbool()) {
+        msgs += { error("Attemping to negate non boolean", e.src) };
+      } 
     }
   }
   

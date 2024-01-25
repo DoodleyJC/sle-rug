@@ -23,6 +23,7 @@ data AExpr(loc src = |tmp:///|)
   = ref(AIdent id)
   | inte(int n)
   | boo(bool b)
+  | stri(str s)
   | unary(AExpr other)
   | binary(AExpr lhs, str op, AExpr rhs)
   ;

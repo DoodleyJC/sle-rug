@@ -77,10 +77,17 @@ bool transformValueToBool(Value val) {
     }
 }
 
-int transformValueToInt(Value v) {
-  switch (v) {
+int transformValueToInt(Value val) {
+  switch (val) {
     case vint(n): return n;
     default: throw "Expected integer, got other type";
+  }
+}
+
+str transformValueToString(Value val) {
+  switch (val) {
+    case vstr(s): return s;
+    default: throw "Expected string, got other type";
   }
 }
 
@@ -128,6 +135,7 @@ Value eval(AExpr e, VEnv venv) {
    switch (e) {
     case ref(id(str x)): { return venv[x]; }
     case inte(int x): { return vint(x); }
+    case stri(str s): { return vstr(s); }
     case binary(AExpr lhs, str op, AExpr rhs): {
       Value left = eval(lhs, venv);
       Value right = eval(rhs, venv);

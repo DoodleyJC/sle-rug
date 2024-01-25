@@ -166,11 +166,16 @@ set[Message] check(AExpr e, TEnv tenv, UseDef useDef) {
     case boo(bool b): {
       b;
     }
+    case stri(str s): {
+      s;
+    }
     case binary(AExpr left, str op, AExpr right): {
       Type lhsType = typeOf(left, tenv, useDef);
       Type rhsType = typeOf(right, tenv, useDef);
-      if (lhsType != tint()) {
+      if ((op == "+" || op == "-" || op == "*" || op == "/" ||  op == "\<" || op == "\<=" || op == "\>" || op == "\>=") && (lhsType != tint() || rhsType != tint())) {
         msgs += { error("Attempting binary operation on non numeric types", e.src) };
+      } else if (op == "&&" || op == "||" && (lhsType != tbool() || rhsType != tbool())) {
+        msgs += { error("Attempting boolean operation on non boolean types", e.src) };
       }
     }
   }
@@ -191,11 +196,13 @@ Type typeOf(AExpr e, TEnv tenv, UseDef useDef) {
     case boo(bool _): {
       return tbool();
     }
+    case stri(str _): {
+      return tstr();
+    }
     case binary(AExpr left, str op, AExpr right): {
       Type lhsType = typeOf(left, tenv, useDef);
       Type rhsType = typeOf(right, tenv, useDef);
-
-      // Check that both sides are of type int or both of type bool, else unknown
+      
       if ((lhsType == tint() && rhsType == tint())) {
         return tint();
       } else if(lhsType == tbool() && rhsType == tbool()) {

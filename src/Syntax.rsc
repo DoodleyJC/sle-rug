@@ -61,6 +61,7 @@ syntax Expr
 syntax Type 
 = "boolean"
 | "integer"
+| "string"
 ;
 
 lexical Str 

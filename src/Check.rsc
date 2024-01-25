@@ -184,8 +184,10 @@ set[Message] check(AExpr e, TEnv tenv, UseDef useDef) {
       Type rhsType = typeOf(right, tenv, useDef);
       msgs += check(left, tenv, useDef);
       msgs += check(right, tenv, useDef);
-      if ((op == "+" || op == "-" || op == "*" || op == "/" ||  op == "\<" || op == "\<=" || op == "\>" || op == "\>=") && (lhsType != tint() || rhsType != tint())) {
+      if ((op == "+" || op == "-" || op == "*" || op == "/") && (lhsType != tint() || rhsType != tint())) {
         msgs += { error("Attempting binary operation on non numeric types", e.src) };
+      } else if ((op == "\<" || op == "\<=" || op == "\>" || op == "\>=") && (lhsType != tint() || rhsType != tint())) {
+        msgs += { error("Attemping relative operation on non numeric type", e.src)};
       } else if ((op == "&&" || op == "||") && (lhsType != tbool() || rhsType != tbool())) {
         msgs += { error("Attempting boolean operation on non boolean types", e.src) };
       } else if ((op == "==" || op == "!=") && (lhsType != rhsType)) {

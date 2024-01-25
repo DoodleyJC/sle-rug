@@ -35,8 +35,6 @@ HTMLElement form2html(AForm f) {
       bodyList += ([] | it + compileQuestionHTML(que) | que <- listQuestions);
     }
   }
-  //println(bodyList);
-  //println(li(bodyList));
   return html([HTMLhead, body([ol(bodyList)])]);
 }
 
@@ -123,7 +121,6 @@ str form2js(AForm f) {
 }
 
 str question2js(AQuestion q){
-  println("called");
   str result = "";
   switch(q){
     case ifQuestion(AExpr cond, list[AQuestion] thenBlock):
@@ -133,7 +130,7 @@ str question2js(AQuestion q){
         result+= "function update<identhelp>(){
                 var element = document.getElementById(\"<identhelp>\");
                 if(<expressionToJs(cond)> == undefined){
-                  return;
+                  changeChildrenVisibility(element, \"hidden\");
                 }
                 if(<expressionToJs(cond)>){
                     changeChildrenVisibility(element, \"visible\");
@@ -142,10 +139,9 @@ str question2js(AQuestion q){
                 }
             }
             functionTable.push(update<identhelp>);";
-        println("test1");
-        //println(thenBlock);
+
         result += ("" | it + question2js(que) | que <- thenBlock);
-        println("test2");
+
         return result;
       } 
     case question(str name, AIdent id, _, AExpr exp):{
@@ -180,14 +176,11 @@ result +=
     }
 }
 functionTable.push(ifelse<cond.src.offset>);";
-      println("test3");
       result += ("" | it + question2js(ques) | ques<-thenBlock);
       result += ("" | it + question2js(ques) | ques<- elseBlock);
-      println("test4");
       return result;
     }
     default: {
-      println("error");
       return "";
     }
   }
@@ -196,7 +189,6 @@ functionTable.push(ifelse<cond.src.offset>);";
 
 
 str expressionToJs(AExpr e){
-  println("exptojs called");
   switch(e){
     case ref(AIdent id):{
       return "symbolTable.get(\"<id.name>\")";

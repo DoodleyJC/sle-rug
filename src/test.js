@@ -3,24 +3,63 @@ const functionTable = [];
 
 
 function hideById(id){
-    document.getElementById(id).style.visiblity = "hidden";
+    document.getElementById(id).style.visibility = "hidden";
 }
 
 function showById(id){
-    document.getElementById(id).style.visiblity = "visible";
+    document.getElementById(id).style.visibility = "visible";
+}
+function parentHideSearch(element){
+    if(element.parentNode && element.parentNode.style){
+        if(element.parentNode.style.visibility == "hidden"){
+            return false;
+        } else{
+            parentHideSearch(element.parentNode);
+        }
+    }
+    return true;
 }
 
 function changeChildrenVisibility(element, status){
-    if(element.style){
-        element.style.visibility = status;
-        console.log(element);
+    
+    /*
+    if(element.parentNode.style.visibility == "hidden"){
+        status = "hidden"
     }
-    if(status="visible"){
-        return;
+    */
+
+    if(status=="visible" && parentHideSearch(element)){
+        if(element.style){
+            element.style.visibility = "visible"
+        }
+        for(let child of element.childNodes){
+            if(child.style){
+                if(child.parentNode.style.visibility=="hidden"){
+
+                } else{
+                    child.style.visibility = "visible";
+                }
+                
+            }
+            if(child.tagName == "LI"){
+
+                for(let childchild of child.childNodes){
+                    if(childchild.style){
+                        childchild.style.visibility = "visible";
+                    }
+                    
+                }
+            }
+        }  
     }
-    for(let child of element.childNodes){
-        changeChildrenVisibility(child, status);
-    }  
+    if(status=="hidden"){
+        if(element.style){
+            element.style.visibility = "hidden";
+        }
+        for(let child of element.childNodes){
+            changeChildrenVisibility(child, status);
+        }
+    }    
 }
 
 
@@ -44,7 +83,7 @@ function updateValue(id, value){
 
 
 function updateAll(){
-    for(let f of functionTable){
+    for(let f of functionTable.reverse()){
         f();
     }
 }
@@ -83,7 +122,7 @@ function updateIfElse1(){
         elementif.style.visibility = "visible";
         elementelse.style.visibility = "hidden";
     } else{
-        elementelse.style.visiblity = "visible";
+        elementelse.style.visibility = "visible";
         elementif.style.visibility = "hidden";
     }
 }

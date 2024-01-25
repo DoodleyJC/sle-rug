@@ -221,6 +221,10 @@ Type typeOf(AExpr e, TEnv tenv, UseDef useDef) {
       Type lhsType = typeOf(left, tenv, useDef);
       Type rhsType = typeOf(right, tenv, useDef);
 
+      if (op == "\>" || op == "\>=" || op == "\<" || op == "\<=") {
+        return tbool();
+      }
+
       if ((lhsType == tint() && rhsType == tint())) {
         return tint();
       } else if(lhsType == tbool() && rhsType == tbool()) {

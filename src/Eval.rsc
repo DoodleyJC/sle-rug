@@ -28,7 +28,7 @@ data Input
 Value uninitValue(str typ) {
     if(typ == "integer") {return vint(0);}
     if(typ == "boolean") {return vbool(false);}
-    if(typ == "str") {return vstr("");}
+    if(typ == "string") {return vstr("");}
     throw "Unknown";
 }
 
@@ -136,6 +136,10 @@ Value eval(AExpr e, VEnv venv) {
     case ref(id(str x)): { return venv[x]; }
     case inte(int x): { return vint(x); }
     case stri(str s): { return vstr(s); }
+    case unary(AExpr lhs): {
+      Value left = eval(lhs, venv);
+      return evalOperator(left, "!", vbool(false));
+    }
     case binary(AExpr lhs, str op, AExpr rhs): {
       Value left = eval(lhs, venv);
       Value right = eval(rhs, venv);

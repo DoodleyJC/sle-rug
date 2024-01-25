@@ -221,7 +221,7 @@ Type typeOf(AExpr e, TEnv tenv, UseDef useDef) {
       Type lhsType = typeOf(left, tenv, useDef);
       Type rhsType = typeOf(right, tenv, useDef);
 
-      if (op == "\>" || op == "\>=" || op == "\<" || op == "\<=") {
+      if (op == "\>" || op == "\>=" || op == "\<" || op == "\<=" || op == "==" || op == "!=") {
         return tbool();
       }
 
@@ -236,8 +236,7 @@ Type typeOf(AExpr e, TEnv tenv, UseDef useDef) {
 
     }
     case unary(AExpr expr): {
-      Type exprType = typeOf(expr, tenv, useDef);
-      return checkType(exprType);
+      return tbool();
     }
   }
   return tunknown(); 

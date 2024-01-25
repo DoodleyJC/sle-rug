@@ -6,9 +6,9 @@ form taxOfficeExample {
     hasMaintLoan: string
     
   "Did you sell a house in 2010?"
-    hasSoldHouse: string    
+    hasSoldHouse: boolean    
    
-  if (hasMaintLoan == hasSoldHouse) {
+  if (hasMaintLoan != hasSoldHouse) {
     "What was the selling price?"
       sellingPrice: integer
     "Private debts for the sold house:"

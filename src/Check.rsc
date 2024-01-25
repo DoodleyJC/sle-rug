@@ -188,6 +188,8 @@ set[Message] check(AExpr e, TEnv tenv, UseDef useDef) {
         msgs += { error("Attempting binary operation on non numeric types", e.src) };
       } else if ((op == "&&" || op == "||") && (lhsType != tbool() || rhsType != tbool())) {
         msgs += { error("Attempting boolean operation on non boolean types", e.src) };
+      } else if ((op == "==" || op == "!=") && (lhsType != rhsType)) {
+        msgs += { error("Attempting equality operation on non different types", e.src) };
       }
     }
     case unary(AExpr expr): {

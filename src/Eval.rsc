@@ -162,8 +162,28 @@ Value evalOperator(Value left, str operator, Value right) {
     case "\<=": return vbool(transformValueToInt(left) <= transformValueToInt(right));
     case "\>": return vbool(transformValueToInt(left) > transformValueToInt(right));
     case "\>=": return vbool(transformValueToInt(left) >= transformValueToInt(right));
-    case "==": return vbool(transformValueToInt(left) == transformValueToInt(right));
-    case "!=": return vbool(transformValueToInt(left) != transformValueToInt(right));
+    case "==": {
+      if (left is vint && right is vint) {
+        return vbool(transformValueToInt(left) == transformValueToInt(right));
+      } else if(left is vbool && right is vbool) {
+        return vbool(transformValueToBool(left) == transformValueToBool(right));
+      } else if(left is vstr && right is vstr) {
+        return vbool(transformValueToString(left) == transformValueToString(right));
+      } else {
+        throw "ERR: <operator>";
+      }
+    }
+    case "!=": {
+      if (left is vint && right is vint) {
+        return vbool(transformValueToInt(left) != transformValueToInt(right));
+      } else if(left is vbool && right is vbool) {
+        return vbool(transformValueToBool(left) != transformValueToBool(right));
+      } else if(left is vstr && right is vstr) {
+        return vbool(transformValueToString(left) != transformValueToString(right));
+      } else {
+        throw "ERR: <operator>";
+      }
+    }
 
     default: throw "ERR: <operator>";
   }

@@ -131,12 +131,22 @@ set[Message] check(AQuestion q, TEnv tenv, UseDef useDef) {
     }
 
     case ifQuestion(AExpr expr, list[AQuestion] ifQuestions): {
+      msgs += check(expr, tenv, useDef); // Call semantic check on expression!!!
+      if (typeOf(expr, tenv, useDef) != tbool()) {
+        msgs += { error("Non boolean in conditional statement") };
+      }
+
       for(AQuestion q <- ifQuestions) {
         msgs += check(q, tenv, useDef); 
       }
     }
 
     case ifElseQuestion(AExpr expr, list[AQuestion] ifBody, list[AQuestion] elseBody): {
+      msgs += check(expr, tenv, useDef); // Call semantic check on expression!!!
+      if (typeOf(expr, tenv, useDef) != tbool()) {
+        msgs += { error("Non boolean in conditional statement") };
+      }
+      
       for(AQuestion q <- ifBody) {
         msgs += check(q, tenv, useDef); 
       }
@@ -174,7 +184,7 @@ set[Message] check(AExpr e, TEnv tenv, UseDef useDef) {
       Type rhsType = typeOf(right, tenv, useDef);
       if ((op == "+" || op == "-" || op == "*" || op == "/" ||  op == "\<" || op == "\<=" || op == "\>" || op == "\>=") && (lhsType != tint() || rhsType != tint())) {
         msgs += { error("Attempting binary operation on non numeric types", e.src) };
-      } else if (op == "&&" || op == "||" && (lhsType != tbool() || rhsType != tbool())) {
+      } else if ((op == "&&" || op == "||") && (lhsType != tbool() || rhsType != tbool())) {
         msgs += { error("Attempting boolean operation on non boolean types", e.src) };
       }
     }
@@ -202,7 +212,7 @@ Type typeOf(AExpr e, TEnv tenv, UseDef useDef) {
     case binary(AExpr left, str op, AExpr right): {
       Type lhsType = typeOf(left, tenv, useDef);
       Type rhsType = typeOf(right, tenv, useDef);
-      
+
       if ((lhsType == tint() && rhsType == tint())) {
         return tint();
       } else if(lhsType == tbool() && rhsType == tbool()) {

@@ -113,7 +113,7 @@ set[Message] check(AQuestion q, TEnv tenv, UseDef useDef) {
 
       // Check for duplicate labels
       for (<_, _, str label, _> <- tenv) {
-        if (label_q == label) { // Assuming identifier.name is unique
+        if (label_q == label) {
           labelCnt += 1;
         }
       }

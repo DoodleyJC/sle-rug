@@ -17,8 +17,11 @@ RESOLVE
 resolve(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)));
 
 CHECK
-check(  cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)), collect(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|))), resolve(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|))).useDef);
+check( cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)), collect(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|))), resolve(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|))).useDef);
 check( cst2ast(parse(#start[Form], |project://sle-rug/examples/NonMatchingOperandTypes.myql|)), collect(cst2ast(parse(#start[Form], |project://sle-rug/examples/NonMatchingOperandTypes.myql|))), resolve(cst2ast(parse(#start[Form], |project://sle-rug/examples/NonMatchingOperandTypes.myql|))).useDef);
+check( cst2ast(parse(#start[Form], |project://sle-rug/examples/ExpressionTypeReturnError.myql|)), collect(cst2ast(parse(#start[Form], |project://sle-rug/examples/ExpressionTypeReturnError.myql|))), resolve(cst2ast(parse(#start[Form], |project://sle-rug/examples/ExpressionTypeReturnError.myql|))).useDef);
+check( cst2ast(parse(#start[Form], |project://sle-rug/examples/DuplicateLabels.myql|)), collect(cst2ast(parse(#start[Form], |project://sle-rug/examples/DuplicateLabels.myql|))), resolve(cst2ast(parse(#start[Form], |project://sle-rug/examples/DuplicateLabels.myql|))).useDef);
+
 
 EVAL
 eval(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)),  input("sellingPrice", vint(100)), eval(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)), input("hasSoldHouse", vbool(true)),  initialEnv(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)))));

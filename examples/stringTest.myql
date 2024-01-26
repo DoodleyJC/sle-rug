@@ -1,0 +1,7 @@
+form stringTest{
+    "how are you doing today?"
+        mood: string
+
+    "mood:"
+        actualMood: string = mood + mood
+}

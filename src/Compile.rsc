@@ -84,6 +84,10 @@ HTMLElement getHTMLElementQuestion(str name, AIdent id, AType questionType){
       htmlQuestion.\type = "number";
       htmlQuestion.oninput = "updateValue(this.id, this.value); updateAll();";
     }
+    case "string": {
+      htmlQuestion.\type = "text";
+      htmlQuestion.oninput = "updateValue(this.id, this.value); updateAll();";
+    }
   }
   return li([text(name),htmlQuestion]);
 }
@@ -196,6 +200,9 @@ str expressionToJs(AExpr e){
     case inte(int n):{
       return "Number(<n>)";
     }
+    case stri(str s):{
+      return "\"<s>\"";
+    }
     case boo(bool b):{
       return "<b>";
     }
@@ -203,7 +210,7 @@ str expressionToJs(AExpr e){
       return "!(<expressionToJs(exp)>)";
     }
     case binary(AExpr lhs, str op, AExpr rhs):{
-      return "Number(<expressionToJs(lhs)>) <op> Number(<expressionToJs(rhs)>)";
+      return "<expressionToJs(lhs)> <op> <expressionToJs(rhs)>";
     }
 
 

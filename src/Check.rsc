@@ -123,7 +123,7 @@ set[Message] check(AQuestion q, TEnv tenv, UseDef useDef) {
       }
 
       // Check that type of Expression expre matches with type of Question q
-      if(typeOf(expr, tenv, useDef) != transformTypeName(qTyp.name)) {
+      if(typeOf(expr, tenv, useDef) != tunknown() && typeOf(expr, tenv, useDef) != transformTypeName(qTyp.name)) {
         msgs += { error("The Type of the question does not match the type of the expression", id.src) };
       }
       msgs += check(expr, tenv, useDef); // Call semantic check on expression!!!

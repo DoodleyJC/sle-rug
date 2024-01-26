@@ -1,6 +1,13 @@
 import IDE;
 import Syntax;
 import ParseTree;
+import AST;
+import CST2AST;
+import Resolve;
+import Check;
+import Eval;
+import Compile;
+import Transform
 parse(#start[Form], |project://sle-rug/examples/tax.myql|);
 
 CST2AST
@@ -14,11 +21,13 @@ check(  cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)), col
 check( cst2ast(parse(#start[Form], |project://sle-rug/examples/NonMatchingOperandTypes.myql|)), collect(cst2ast(parse(#start[Form], |project://sle-rug/examples/NonMatchingOperandTypes.myql|))), resolve(cst2ast(parse(#start[Form], |project://sle-rug/examples/NonMatchingOperandTypes.myql|))).useDef);
 
 EVAL
-eval(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)), input("sellingPrice", vint(100)), eval(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)), input("hasBoughtHouse", vbool(true)), initialEnv(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)))));
+eval(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)),  input("sellingPrice", vint(100)), eval(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)), input("hasBoughtHouse", vbool(false)),  initialEnv(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)))));
+
 
 TRANSFORM
 flatten(cst2ast(parse(#start[Form], |project://sle-rug/examples/transformTest.myql|)));
-rename(parse(#start[Form], |project://sle-rug/examples/tax.myql|), |project://sle-rug/examples/tax.myql|(268,12,<9,5>,<9,17>), "soldHouse", resolve(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)))<2>);
+rename(parse(#start[Form], |project://sle-rug/examples/tax.myql|), |project://sle-rug/examples/tax.myql|(194,12,<9,4>,<9,16>), "NAMECHANGE", resolve(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)))<2>);
+rename(parse(#start[Form], |project://sle-rug/examples/transformTest.myql|), |project://sle-rug/examples/transformTest.myql|(108,2,<8,8>,<8,10>), "NAMECHANGE", resolve(cst2ast(parse(#start[Form], |project://sle-rug/examples/transformTest.myql|)))<2>);
 
 
 Following commands are to do the compiling:

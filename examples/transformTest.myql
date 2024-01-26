@@ -2,12 +2,15 @@ form transformExample {
   ""
     n0: integer 
    
-  if (true) {
-    if (false) {
+  if (a) {
+    if (b) {
         ""
         n1: integer
     }
     ""
       n2: integer
+  } else {
+    ""
+      n3 : integer
   }
 }

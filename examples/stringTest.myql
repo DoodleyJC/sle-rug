@@ -2,6 +2,16 @@ form stringTest{
     "how are you doing today?"
         mood: string
 
-    "mood:"
-        actualMood: string = mood + mood
+    "how is the weather"
+        weather: string
+
+    if(weather == "rain"){
+        "mood:"
+        actualMood: string = mood + weather
+    }
+    if(weather == mood){
+        "your mood is equal to the weather:"
+        moodvsweather: string = weather + mood
+    }
+    
 }

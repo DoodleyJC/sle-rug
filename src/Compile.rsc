@@ -97,7 +97,7 @@ HTMLElement getHTMLElementQuestion(str name, AIdent id, AType questionType){
 HTMLElement ifQuestionHTML(AExpr cond, list[AQuestion] thenBlock){
   HTMLElement res = ol(([] | it + compileQuestionHTML(inner) | inner <- thenBlock));
   res.id = "if<cond.src.offset>";
-  res.style = "visibility: inherit";
+  res.style = "visibility: hidden";
   return res;
 }
 
@@ -114,7 +114,7 @@ HTMLElement ifElseQuestionHTML(AExpr cond, list[AQuestion] thenBlock, list[AQues
 
 str form2js(AForm f) {
   str result = "";
-  result += readFile(|project://sle-rug/src/test.js|);
+  result += readFile(|project://sle-rug/src/basejs.js|);
   visit(f){
     case form(_, list[AQuestion] listQuestions):
       {
@@ -201,7 +201,7 @@ str expressionToJs(AExpr e){
       return "Number(<n>)";
     }
     case stri(str s):{
-      return "\"<s>\"";
+      return "<s>";
     }
     case boo(bool b):{
       return "<b>";

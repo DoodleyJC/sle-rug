@@ -7,7 +7,7 @@ import Resolve;
 import Check;
 import Eval;
 import Compile;
-import Transform
+import Transform;
 parse(#start[Form], |project://sle-rug/examples/tax.myql|);
 
 CST2AST
@@ -31,7 +31,7 @@ eval(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)),  input
 TRANSFORM
 flatten(cst2ast(parse(#start[Form], |project://sle-rug/examples/transformTest.myql|)));
 rename(parse(#start[Form], |project://sle-rug/examples/tax.myql|), |project://sle-rug/examples/tax.myql|(194,12,<9,4>,<9,16>), "NAMECHANGE", resolve(cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|)))<2>);
-rename(parse(#start[Form], |project://sle-rug/examples/transformTest.myql|), |project://sle-rug/examples/transformTest.myql|(108,2,<8,8>,<8,10>), "NAMECHANGE", resolve(cst2ast(parse(#start[Form], |project://sle-rug/examples/transformTest.myql|)))<2>);
+rename(parse(#start[Form], |project://sle-rug/examples/transformTest.myql|), |project://sle-rug/examples/transformTest.myql|(101,2,<8,8>,<8,10>), "NAMECHANGE", resolve(cst2ast(parse(#start[Form], |project://sle-rug/examples/transformTest.myql|)))<2>);
 
 
 Following commands are to do the compiling:

@@ -92,13 +92,18 @@ set[Message] check(AQuestion q, TEnv tenv, UseDef useDef) {
         }
       }
       
-      set[str] encounteredLabels = {};
+      int labelCnt = 0;
+
       // Check for duplicate labels
-      if (label_q in encounteredLabels) {
-        msgs += { warning("Duplicate labels detected", id.src) };
-      } else {
-        encounteredLabels += label_q;
-      }
+      for (<_, _, str label, _> <- tenv) {
+        if (label_q == label) {
+          labelCnt += 1;
+        }
+      }
+
+      if (labelCnt > 1) {
+        msgs += { warning("Duplicate labels", id.src) };
+      }
 
     }
     case question(str label_q, AIdent id, AType qTyp, AExpr expr): {

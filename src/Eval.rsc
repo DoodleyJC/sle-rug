@@ -96,7 +96,7 @@ str transformValueToString(Value val) {
 VEnv eval(AQuestion q, Input inp, VEnv venv) {
   // evaluate conditions for branching,
   // evaluate inp and computed questions to return updated VEnv
-  visit(q) {
+  switch (q) {
     case question(_, AIdent id, _): {
       if (id.name == inp.question) {
         venv[id.name] = inp.\value;

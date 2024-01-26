@@ -84,7 +84,7 @@ start[Form] rename(start[Form] f, loc useOrDef, str newName, UseDef useDef) {
 
 Ident replaceName(Ident id, set[loc] locations, str newName) {
     if (id.src in locations) {
-        return [Ident]newName;
+        return [Ident]newName; //this means parse the string newName as an Ident, you could also call the parse function
     } else {
         return id;
     }

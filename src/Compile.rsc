@@ -150,7 +150,7 @@ str question2js(AQuestion q){
       } 
     case question(str name, AIdent id, _, AExpr exp):{
       return "
-function updateComp<id.name>(){
+  function updateComp<id.name>(){
   var element = document.getElementById(\"<id.name>\");
   element.textContent = <name> + String(<expressionToJs(exp)>);
   symbolTable.set(\"<id.name>\", <expressionToJs(exp)>);

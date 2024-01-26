@@ -24,8 +24,8 @@ data AExpr(loc src = |tmp:///|)
   | inte(int n)
   | boo(bool b)
   | stri(str s)
-  | unary(AExpr other)
-  | binary(AExpr lhs, str op, AExpr rhs)
+  | unary(AExpr other) //should have an operator
+  | binary(AExpr lhs, str op, AExpr rhs) //str op can be anything, should be a datatype (binop for example).
   ;
 
 

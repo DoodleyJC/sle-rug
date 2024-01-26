@@ -189,7 +189,7 @@ set[Message] check(AExpr e, TEnv tenv, UseDef useDef) {
       Type rhsType = typeOf(right, tenv, useDef);
       msgs += check(left, tenv, useDef);
       msgs += check(right, tenv, useDef);
-      if ((op == "+" || op == "-" || op == "*" || op == "/") && (lhsType != tint() || rhsType != tint())) {
+      if ((op == "+" || op == "-" || op == "*" || op == "/") && (lhsType != tint() || rhsType != tint())) { //switch with cases instead of big if statement
         msgs += { error("Attempting binary operation on non numeric types", e.src) };
       } else if ((op == "\<" || op == "\<=" || op == "\>" || op == "\>=") && (lhsType != tint() || rhsType != tint())) {
         msgs += { error("Attemping relative operation on non numeric type", e.src)};

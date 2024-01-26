@@ -41,4 +41,6 @@ Following commands are to do the compiling:
     import CST2AST;
     import Compile;
     f=cst2ast(parse(#start[Form], |project://sle-rug/examples/tax.myql|));
+    f2=cst2ast(parse(#start[Form], |project://sle-rug/examples/binary.myql|));
+    compile(f2);
     compile(f);
